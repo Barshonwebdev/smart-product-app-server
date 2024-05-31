@@ -5,7 +5,7 @@ const app=express();
 const cors=require('cors');
 require('dotenv').config();
 const port=process.env.PORT || 3100;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 // middleware 
@@ -52,6 +52,15 @@ const client = new MongoClient(uri, {
         const result=await productCollection.find().toArray();
         res.send(result);
       })
+
+      // get specific product 
+      app.get('/gadgets/:id',async(req,res)=>{
+        const id=req.params.id;
+        const result=await productCollection.findOne({_id:new ObjectId(id)});
+        res.send(result);
+      })
+
+      
     } finally {
     //   await client.close();
     }
