@@ -77,6 +77,13 @@ const client = new MongoClient(uri, {
         res.send(result);
       }) 
 
+      // delete specific product 
+      app.delete('/gadgets/:id',async(req,res)=>{
+        const id=req.params.id;
+        const result=await productCollection.deleteOne({_id:new ObjectId(id)});
+        res.send(result);
+      })
+
       
     } finally {
     //   await client.close();
