@@ -60,6 +60,23 @@ const client = new MongoClient(uri, {
         res.send(result);
       })
 
+      // update specific product
+      app.patch('/gadgets/:id',async(req,res)=>{
+        const id=req.params.id;
+        const updatedProduct=req.body;
+
+        const filter={
+          _id:new ObjectId(id)
+        };
+
+        const updateDoc={
+          $set:updatedProduct
+        }
+
+        const result=await productCollection.updateOne(filter,updateDoc);
+        res.send(result);
+      }) 
+
       
     } finally {
     //   await client.close();
