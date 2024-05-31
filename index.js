@@ -40,9 +40,16 @@ const client = new MongoClient(uri, {
       const smartProductDB=client.db('smart-product-db');
       const productCollection=smartProductDB.collection('product-collection');
 
+      // add product 
       app.post('/gadgets', async(req,res)=>{
         const productData=req.body;
         const result=await productCollection.insertOne(productData);
+        res.send(result);
+      })
+
+      // get all products
+      app.get('/gadgets',async(req,res)=>{
+        const result=await productCollection.find().toArray();
         res.send(result);
       })
     } finally {
