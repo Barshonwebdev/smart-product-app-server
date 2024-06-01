@@ -39,6 +39,8 @@ const client = new MongoClient(uri, {
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
       const smartProductDB=client.db('smart-product-db');
       const productCollection=smartProductDB.collection('product-collection');
+      const userCollection=smartProductDB.collection('user-collection');
+      // product APIs 
 
       // add product 
       app.post('/gadgets', async(req,res)=>{
@@ -84,6 +86,13 @@ const client = new MongoClient(uri, {
         res.send(result);
       })
 
+      // user APIs
+
+      app.post('/user',async(req,res)=>{
+        const user=req.body;
+        const result=await userCollection.insertOne(user);
+        res.send(result);
+      })
       
     } finally {
     //   await client.close();
