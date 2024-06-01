@@ -90,6 +90,12 @@ const client = new MongoClient(uri, {
 
       app.post('/user',async(req,res)=>{
         const user=req.body;
+        const isUserExist=await userCollection.findOne({email:user.email})
+        if(isUserExist){
+         return res.send({
+          message:'user already exists on database'
+         })
+        }
         const result=await userCollection.insertOne(user);
         res.send(result);
       })
