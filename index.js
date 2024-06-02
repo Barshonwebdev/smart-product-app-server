@@ -12,7 +12,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 app.use(cors());
 app.use(express.json());
 
-// jwt function
+// jwt create token function
 function createToken(user) {
   const token = jwt.sign(
     {
@@ -21,8 +21,20 @@ function createToken(user) {
     "secret",
     { expiresIn: "7d" }
   );
-
+  
   return token;
+}
+
+// jwt token verify function 
+function verifyToken(req,res,next){
+  const token=req.headers.authorization.split(' ')[1];
+  const verify=jwt.verify(token,"secret");
+  if(!verify?.email){
+   return res.send('You are not authorized');
+  }
+  req.user=verify.email;
+  console.log(verify);
+  next();
 }
 
 // routes
@@ -78,7 +90,7 @@ async function run() {
     });
 
     // update specific product
-    app.patch("/gadgets/:id", async (req, res) => {
+    app.patch("/gadgets/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const updatedProduct = req.body;
 
